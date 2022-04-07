@@ -18,7 +18,7 @@ void display_all_books()
 {
     book_node *p = books->next;
     printf("ID\tTitle\tAuthor\tyear\tcopies\n");
-    while (p != NULL)
+    while (p)
     {
         printf("%d \t%s \t%s \t%d \t%d\n", p->book.id, p->book.title, p->book.author, p->book.year, p->book.copies);
         p = p->next;
@@ -28,8 +28,8 @@ void display_all_books()
 void read_users()
 {
     int i;
-    FILE *fp;
     // read users.txt
+    FILE *fp;
     fp = fopen("../users.txt", "r");
     if (fp == NULL)
     {
@@ -45,7 +45,7 @@ void read_users()
         }
     }
     users->pu = i - 1;
-    // show users.txt
+    // show users.txt(test)
     // for (int i = 0; i <= users->top; i++)
     // {
     //     printf("%s %d\n", users->us[i].account, users->us[i].bn1);
@@ -63,15 +63,15 @@ void read_books()
     int j = 0, k = 1;
     char c;
     char tmp[100];
-    FILE *fp;
     // read books.txt
+    FILE *fp;
     books = init_book_list();
     fp = fopen("../books.txt", "r");
     if (fp == NULL)
     {
         exit(0);
     }
-    book_node *p, *pre = books;
+    book_node *p, *t1 = books;
     memset(tmp, '\0', 100);
     while (!feof(fp))
     {
@@ -121,14 +121,12 @@ void read_books()
         } while (c != '\n' && !feof(fp));
         k = 1;
         p->next = NULL;
-        pre->next = p;
-        pre = p;
+        t1->next = p;
+        t1 = p;
         count++;
     }
     books->top = count;
-
-    // display_all_books();
-
+    // display_all_books();(test)
     fclose(fp);
 }
 
@@ -139,10 +137,10 @@ void read_file()
 }
 void write_file()
 {
-    FILE *f;
-    // write users to users.txt
-    f = fopen("../users.txt", "w+");
     int q;
+    // write users to users.txt
+    FILE *f;
+    f = fopen("../users.txt", "w+");
     for (q = 0; q < users->pu; q++)
     {
         fprintf(f, "%s %s %d\n", users->us[q].account, users->us[q].passwd, users->us[q].bn1);
@@ -265,15 +263,16 @@ void search_all_books()
         }
         else
         {
+
         }
     }
 }
 
 void add_book()
 {
-    book_node *p, *pre = books;
-    p = (book_node *)malloc(sizeof(book_node));
     char tmp[100];
+    book_node *p, *t1 = books;
+    p = (book_node *)malloc(sizeof(book_node));
     printf("Enter the title of the book you want to add: ");
     memset(tmp, '\0', 100);
     gets(tmp);
@@ -291,14 +290,12 @@ void add_book()
     scanf("%d", &p->book.copies);
     getchar();
     books->top++;
-
     p->book.id = books->top + 1;
-
-    while (pre->next != NULL)
+    while (t1->next != NULL)
     {
-        pre = pre->next;
+        t1 = t1->next;
     }
-    pre->next = p;
+    t1->next = p;
     p->next = NULL;
     printf("Add successfully\n");
     // printf("Sorry,you attempted to add an invalid book,please try again.\n");
@@ -311,19 +308,20 @@ void remove_book()
     printf("Enter the ID of the book you want to remove: ");
     scanf("%d", &id);
     getchar();
-    book_node *p = books->next, *pre = books;
+    book_node *t1 = books;
+    book_node *p = books->next;
     while (p != NULL)
     {
         if (p->book.id != id)
         {
-            pre = p;
+            t1 = p;
             p = p->next;
         }
         else
         {
-            pre->next = p->next;
+            t1->next = p->next;
             free(p);
-            // p = pre->next;
+            // p = t1->next;
             books->top--;
             break;
         }
@@ -360,7 +358,7 @@ void root_manage()
             display_all_books();
             break;
         case 5:
-            printf("goodbye");
+            printf("Goodbye");
             break;
         default:
             getchar();
@@ -549,7 +547,7 @@ void main_menu()
             display_all_books();
             break;
         case 5:
-            printf("goodbye");
+            printf("Goodbye");
             break;
         default:
             getchar();
